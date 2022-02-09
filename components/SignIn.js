@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import { auth } from "../lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useUser } from "../customHooks/userContext";
-import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
-import SnackbarTemplate from "../components/SnackbarTemplate";
 
 const theme = createTheme();
 

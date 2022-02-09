@@ -5,23 +5,16 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import Profile from "../components/Profile";
-
 import { useUser } from "../customHooks/userContext";
-import { Alert, Snackbar } from "@mui/material";
-import SnackbarTemplate from "./SnackbarTemplate";
-
-const pages = ["Products", "Pricing", "Blog"];
+import CustomSnackbar from "./CustomSnackbar";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
   const [signInDrawer, setSignInDrawer] = useState(false);
@@ -33,6 +26,8 @@ export default function NavBar() {
     message: "",
     severity: null,
   });
+
+  const router = useRouter();
 
   const handleUserButton = (event) => {
     if (
@@ -58,7 +53,7 @@ export default function NavBar() {
 
   return (
     <>
-      <SnackbarTemplate snackbar={snackbar} setSnackbar={setSnackbar} />
+      <CustomSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
       <SignIn
         drawer={signInDrawer}
         toggleDrawers={toggleDrawers}
@@ -91,15 +86,20 @@ export default function NavBar() {
             {/* -- Place your logo here -- */}
             {/* ++ Horizontal menu ++ */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => console.log(page)}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}
-                </Button>
-              ))}
+              <Button
+                key="addIngredient"
+                onClick={() => router.push("/addIngredient")}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Add Ingredient
+              </Button>
+              <Button
+                key="myIngredients"
+                onClick={() => router.push("/myIngredients")}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                My Ingredients
+              </Button>
             </Box>
             {/* -- Horizontal menu -- */}
             {/* ++ Account menu ++ */}

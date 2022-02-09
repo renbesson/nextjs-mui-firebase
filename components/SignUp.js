@@ -3,7 +3,6 @@ import { auth, firestore } from "../lib/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useUser } from "../customHooks/userContext";
 import Drawer from "@mui/material/Drawer";
-
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { doc, setDoc } from "firebase/firestore";
-import SnackbarTemplate from "../components/SnackbarTemplate";
+import CustomSnackbar from "./CustomSnackbar";
 import { useRouter } from "next/router";
 
 export default function SignUpDrawer({
