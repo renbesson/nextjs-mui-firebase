@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CustomSnackbar from "../components/CustomSnackbar";
 
 import Card from "@mui/material/Card";
@@ -24,14 +23,12 @@ import { firestore } from "../lib/firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { Chip, Grid } from "@mui/material";
 
-const theme = createTheme();
-
 const nanoid = customAlphabet("0123456789", 6);
 
 export default function addProduct() {
   const { loadingUser, user } = useUser();
   const [snapshot, loading, error] = useCollectionData(
-    collection(firestore, "ingredients")
+    collection(firestore, `users/${user?.uid}/ingredients`)
   );
 
   const [snackbar, setSnackbar] = useState({
@@ -82,7 +79,7 @@ export default function addProduct() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CustomSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
       <CssBaseline />
       <Container sx={{ padding: 4 }}>
@@ -93,6 +90,6 @@ export default function addProduct() {
             ))}
         </Grid>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

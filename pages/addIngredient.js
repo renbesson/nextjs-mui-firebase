@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CustomSnackbar from "../components/CustomSnackbar";
 
 import { doc, setDoc } from "firebase/firestore";
@@ -18,8 +17,6 @@ import { firestore, storage } from "../lib/firebase";
 import { Input } from "@mui/material";
 import FileInput from "../components/FileInput";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-
-const theme = createTheme();
 
 const nanoid = customAlphabet("0123456789", 6);
 
@@ -86,7 +83,7 @@ export default function addProduct() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CustomSnackbar snackbar={snackbar} setSnackbar={setSnackbar} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -190,6 +187,6 @@ export default function addProduct() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

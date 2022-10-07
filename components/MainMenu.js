@@ -2,12 +2,9 @@ import { auth } from "../lib/firebase";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 
-const theme = createTheme();
-
-export default function SignInDrawer({ drawer, clearDrawers, setSnackbar }) {
+export default function MainMenu({ drawer, clearDrawers, setSnackbar }) {
   const onSignOut = () => {
     auth
       .signOut(auth)
@@ -29,13 +26,11 @@ export default function SignInDrawer({ drawer, clearDrawers, setSnackbar }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Drawer anchor="right" open={drawer} onClose={clearDrawers}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Button onClick={onSignOut}>SignOut</Button>
-        </Container>
-      </Drawer>
-    </ThemeProvider>
+    <Drawer anchor="right" open={drawer} onClose={clearDrawers}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Button onClick={onSignOut}>SignOut</Button>
+      </Container>
+    </Drawer>
   );
 }

@@ -1,5 +1,5 @@
-import * as React from "react";
 import { useState } from "react";
+import { auth } from "../lib/firebase";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,15 +11,18 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
-import Profile from "../components/Profile";
+import MainMenu from "../components/MainMenu";
 import { useUser } from "../customHooks/userContext";
 import CustomSnackbar from "./CustomSnackbar";
 import { useRouter } from "next/router";
+import ProfileMenu from "./ProfileMenu";
+import { Menu, MenuItem } from "@mui/material";
 
 export default function NavBar() {
   const [signInDrawer, setSignInDrawer] = useState(false);
   const [signUpDrawer, setSignUpDrawer] = useState(false);
-  const [profileDrawer, setProfileDrawer] = useState(false);
+  const [mainMenuDrawer, setMainMenuDrawer] = useState(false);
+  const [profileMenuDrawer, setProfileMenuDrawer] = useState(false);
   const { loadingUser, user } = useUser();
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
@@ -27,17 +30,23 @@ export default function NavBar() {
     severity: null,
   });
 
+  const loggedOutMenu = [
+    { title: "Sign In", function: () => setSignInDrawer(true) },
+    { title: "Sign Up", function: () => setSignUpDrawer(true) },
+  ];
+
+  const loggedInMenu = [
+    { title: "Profile", function: () => setProfileMenuDrawer(true) },
+    { title: "Account", function: () => console.log("Account") },
+    { title: "Sign Out", function: () => onSignOut() },
+  ];
+
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
   const router = useRouter();
 
   const handleUserButton = (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-    if (!user) setSignInDrawer(!signInDrawer);
-    if (user) setProfileDrawer(!profileDrawer);
+    setAnchorElUser(event.currentTarget);
   };
 
   const toggleDrawers = () => {
@@ -48,7 +57,32 @@ export default function NavBar() {
   const clearDrawers = () => {
     setSignInDrawer(false);
     setSignUpDrawer(false);
-    setProfileDrawer(false);
+    setMainMenuDrawer(false);
+    setProfileMenuDrawer(false);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const onSignOut = () => {
+    auth
+      .signOut(auth)
+      .then(() => {
+        setSnackbar({
+          isOpen: true,
+          message: `Signed out successfully.`,
+          severity: "success",
+        });
+        clearDrawers();
+      })
+      .catch((error) => {
+        setSnackbar({
+          isOpen: true,
+          message: `Error: ${error.message}`,
+          severity: "error",
+        });
+      });
   };
 
   return (
@@ -66,8 +100,13 @@ export default function NavBar() {
         clearDrawers={clearDrawers}
         setSnackbar={setSnackbar}
       />
-      <Profile
-        drawer={profileDrawer}
+      <MainMenu
+        drawer={mainMenuDrawer}
+        clearDrawers={clearDrawers}
+        setSnackbar={setSnackbar}
+      />
+      <ProfileMenu
+        drawer={profileMenuDrawer}
         clearDrawers={clearDrawers}
         setSnackbar={setSnackbar}
       />
@@ -103,19 +142,62 @@ export default function NavBar() {
             </Box>
             {/* -- Horizontal menu -- */}
             {/* ++ Account menu ++ */}
-            <Box sx={{ flexGrow: 0 }}>
-              <Typography display="inline" sx={{ mr: 2 }}>
-                {user ? user.displayName : "SignIn/Up"}
-              </Typography>
-              <Tooltip title="Open Profile">
-                <IconButton onClick={handleUserButton} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={user && user.displayName}
-                    src={user && user.photoURL}
-                  />
-                </IconButton>
-              </Tooltip>
-            </Box>
+            {!loadingUser && (
+              <Box sx={{ flexGrow: 0 }}>
+                <Typography display="inline" sx={{ mr: 2 }}>
+                  {user ? user.displayName : "SignIn/Up"}
+                </Typography>
+                <Tooltip title="Open Main Menu">
+                  <IconButton onClick={handleUserButton} sx={{ p: 0 }}>
+                    <Avatar alt={user?.displayName} src={user?.photoURL} />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {!user
+                    ? loggedOutMenu.map((menu) => (
+                        <MenuItem
+                          key={menu.title}
+                          onClick={handleCloseUserMenu}
+                        >
+                          <Typography
+                            onClick={menu.function}
+                            textAlign="center"
+                          >
+                            {menu.title}
+                          </Typography>
+                        </MenuItem>
+                      ))
+                    : loggedInMenu.map((menu) => (
+                        <MenuItem
+                          key={menu.title}
+                          onClick={handleCloseUserMenu}
+                        >
+                          <Typography
+                            onClick={menu.function}
+                            textAlign="center"
+                          >
+                            {menu.title}
+                          </Typography>
+                        </MenuItem>
+                      ))}
+                </Menu>
+              </Box>
+            )}
             {/* -- Account menu -- */}
           </Toolbar>
         </Container>
