@@ -25,7 +25,7 @@ import { Chip, Grid } from "@mui/material";
 
 const nanoid = customAlphabet("0123456789", 6);
 
-export default function addProduct() {
+export default function MyIngredient() {
   const { loadingUser, user } = useUser();
   const [snapshot, loading, error] = useCollectionData(
     collection(firestore, `users/${user?.uid}/ingredients`)

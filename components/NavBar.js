@@ -17,6 +17,7 @@ import CustomSnackbar from "./CustomSnackbar";
 import { useRouter } from "next/router";
 import ProfileMenu from "./ProfileMenu";
 import { Menu, MenuItem } from "@mui/material";
+import Link from "next/link";
 
 export default function NavBar() {
   const [signInDrawer, setSignInDrawer] = useState(false);
@@ -114,14 +115,20 @@ export default function NavBar() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* ++ Place your logo here ++ */}
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
-            >
-              LOGO
-            </Typography>
+            <Link href="/">
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  mr: 2,
+                  display: { xs: "none", md: "flex" },
+                  cursor: "pointer",
+                }}
+              >
+                LOGO
+              </Typography>
+            </Link>
             {/* -- Place your logo here -- */}
             {/* ++ Horizontal menu ++ */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>

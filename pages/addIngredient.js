@@ -27,7 +27,7 @@ const initialValue = {
   price: "",
 };
 
-export default function addProduct() {
+export default function AddIngredient() {
   const { loadingUser, user } = useUser();
   const [newUid, setNewUid] = useState(nanoid());
   const [ingredient, setIngredient] = useState(initialValue);

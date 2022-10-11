@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Image from "next/image";
 
 export default function FileInput({ setImageFromChild }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -30,7 +31,7 @@ export default function FileInput({ setImageFromChild }) {
       {imageUrl && selectedImage && (
         <Box mt={2} textAlign="center">
           <div>Image Preview:</div>
-          <img src={imageUrl} alt={selectedImage.name} height="100px" />
+          <Image src={imageUrl} alt={selectedImage.name} height="100px" />
         </Box>
       )}
     </>
